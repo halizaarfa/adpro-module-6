@@ -22,3 +22,15 @@ Console akan memberikan pesan HTTP (`http request`) di akhir method.
 - `BufReader` membaca stream atau baris-baris dari `TcpStream` dengan metode `lines()`.
 - `http_request` mengumpulkan baris-baris permintaan HTTP yang diterima dari browser.
 - `println!("Request: {:#?}", http_request);` mencetak seluruh permintaan HTTP dalam format debug.
+
+## Milestone 2: Returning HTML
+Screenshot:
+<img src='img/commit2.png'>
+
+Fungsi `handle_connection` menggunakan `fs::read_to_string` untuk membaca konten dari file `hello.html` ke dalam sebuah string.
+Hal tersebut berguna untuk mengirimkan konten HTML sebagai bagian dari respons yang dikirimkan kembali kepada user.
+
+Setelah itu, buat respons HTTP dengan status line `"HTTP/1.1 200 OK"` dan header `Content-Length` yang menunjukkan panjang dari
+konten HTML yang akan dikirimkan, dan menambahkan konten HTML sebagai badan (body) dari respons.
+
+Selanjutnya, kita mengirimkan respons tersebut melalui stream TCP menggunakan metode `write_all`.
