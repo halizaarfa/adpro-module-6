@@ -55,4 +55,16 @@ Saya melakukan refactoring pada `main.rs` agar tetap sesuai dengan clean code. y
 Langkah yang saya lakukan yaitu mengeluarkan semua variabel yang sama pada blok `if-else`.
 Sebelumnya, `contents` dan `status_line` didefinisikan spesifik untuk tiap blok `if` dan `else`. Hal ini menyebabkan variabel ini tidak dapat digunakan di luar cakupan tersebut.
 Untuk itu, digunakan `let (status_line, contents) = ...` untuk menangani hal tersebut.
- 
+
+## Milestone 4: Simulation Slow Response
+Di sini, disimulasikan respons lambat untuk web server.
+
+Fungsi `thread::sleep` digunakan untuk menunda eksekusi program selama jangka waktu tertentu.
+Digunakan juga `match` untuk memeriksa baris request yang diterima dari klien.
+
+Jika request-nya adalah `"GET /sleep HTTP/1.1"`, server akan melakukan sleep selama 5 detik sebelum memberikan respons.
+Ini mensimulasikan respons lambat yang akan mempengaruhi permintaan lain ke server.
+
+Dibuka dua windows dengan masing-masing endpoint
+`/` dan `/sleep`. Pada situasi biasa, reload endpoint `/` akan berlangsung dengan cepat dan langsung. Namun, jika me-reload `/` setelah `/sleep`,
+terlihat bahwa `/` menunggu sampai endpoint `sleep` selesai melakukan sleep selama 5 detik.
