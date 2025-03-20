@@ -34,3 +34,25 @@ Setelah itu, buat respons HTTP dengan status line `"HTTP/1.1 200 OK"` dan header
 konten HTML yang akan dikirimkan, dan menambahkan konten HTML sebagai badan (body) dari respons.
 
 Selanjutnya, kita mengirimkan respons tersebut melalui stream TCP menggunakan metode `write_all`.
+
+## Milestone 3: Validating Request and Selectively Responding
+Screenshot:
+<img src='img/commit3.png'>
+
+Pada awalnya, web server selalu menampilkan `hello.html` apapun request-nya. Kali ini, kita menambahkan fungsionalitas untuk memeriksa
+apakah browser meminta `/` sebelum mengembalikan file HTML. Jika permintaan tidak sesuai, kita akan mengembalikan respons dengan kode status `404` dan halaman error HTML yang sesuai.
+Penerapan `404.html` mirip seperti `hello.html`.
+
+```rust
+ let request_line = buf_reader.lines().next().unwrap().unwrap();
+ ```
+- `.lines()`, mendapatkan iterator baris-baris dari `BufReader`.
+- `.next()`, mendapatkan opsi pertama dari iterator tersebut.
+- `unwrap()` pertama, mengeluarkan opsi yang mungkin (`Option`) dari `. next()`
+- `unwrap()` kedua, mengeluarkan nilai yang mungkin (`Result`) dari hasil `.next()` tersebut.
+
+Saya melakukan refactoring pada `main.rs` agar tetap sesuai dengan clean code. yaitu `DRY` (Don't Repeat Yourself).
+Langkah yang saya lakukan yaitu mengeluarkan semua variabel yang sama pada blok `if-else`.
+Sebelumnya, `contents` dan `status_line` didefinisikan spesifik untuk tiap blok `if` dan `else`. Hal ini menyebabkan variabel ini tidak dapat digunakan di luar cakupan tersebut.
+Untuk itu, digunakan `let (status_line, contents) = ...` untuk menangani hal tersebut.
+ 
