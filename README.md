@@ -81,5 +81,13 @@ Closure yang diterima oleh `execute` kemudian dikirim melalui sender channel unt
 Dengan implementasi ini, `ThreadPool` dapat secara efisien menangani banyak tasks secara concurrency untuk menjaga jumlah thread yang sesuai agar meminimalkan overhead.
 Channel juga digunakan untuk menyampaikan tasks secara aman di antara thread yang tersedia.
 
+## Bonus
+Dibuat sebuah fungsi baru yaitu `build` yang akan menggantikan fungsi `new`. Panduan refactoring ini mengacu dari buku Rust pada bagian [Refactoring to Improve Modularity and Error Handling](https://doc.rust-lang.org/book/ch12-03-improving-error-handling-and-modularity.html).
+
+Pembeda antara `build()` dengan `new()` terletak pada pendekatan error handling. `build()` lebih baik dalam penanganan error karena dapat memberikan nilai `Result`
+sementara `new()` cenderung untuk memicu panic dalam kasus kesalahan yang tidak diharapkan.
+
+Jika ukuran yang diberikan untuk `ThreadPool` adalah 0 atau negatif, `build()` dapat mengembalikan `Err` dengan pesan yang menjelaskan bahwa ukuran yang diberikan tidak valid atau tidak masuk akal.
+
 ## Referensi
 [Final Project: Building a Multithreaded Web Server](https://rust-book.cs.brown.edu/ch21-00-final-project-a-web-server.html)
