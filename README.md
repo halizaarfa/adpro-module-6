@@ -68,3 +68,18 @@ Ini mensimulasikan respons lambat yang akan mempengaruhi permintaan lain ke serv
 Dibuka dua windows dengan masing-masing endpoint
 `/` dan `/sleep`. Pada situasi biasa, reload endpoint `/` akan berlangsung dengan cepat dan langsung. Namun, jika me-reload `/` setelah `/sleep`,
 terlihat bahwa `/` menunggu sampai endpoint `sleep` selesai melakukan sleep selama 5 detik.
+
+## Milestone 5: Multithreaded Server
+Pada tahap ini, web server diubah dari single-threaded menjadi multi-threaded. `ThreadPool` digunakan untuk  mengelola sejumlah thread
+yang tersedia untuk menangani task yang masuk. Pada contoh ini, awalnya `ThreadPool` hanya menyimpan `Worker` yang merupakan struktur yang berisi `JoinHandle<()>` untuk masing-masing thread.
+
+Untuk membuat implementasi multithreaded, `ThreadPool` diperbarui sehingga menyimpan vektor dari `Worker`. Setiap `Worker` memiliki id yang unik dan sebuah thread
+yang diinisiasi dengan closure kosong. Pada saat pembuatan `ThreadPool`, sebuah channel juga dibuat di mana sender disimpan pada `ThreadPool` dan receiver disalin ke setiap `Worker`.
+Closure yang diterima oleh `execute` kemudian dikirim melalui sender channel untuk dieksekusi oleh salah satu thread yang tersedia.
+`Worker` akan terus meminta tasks dari receiver channel dan menjalankannya dalam loop menggunakan `mutex` untuk menghindari race condition.
+
+Dengan implementasi ini, `ThreadPool` dapat secara efisien menangani banyak tasks secara concurrency untuk menjaga jumlah thread yang sesuai agar meminimalkan overhead.
+Channel juga digunakan untuk menyampaikan tasks secara aman di antara thread yang tersedia.
+
+## Referensi
+[Final Project: Building a Multithreaded Web Server](https://rust-book.cs.brown.edu/ch21-00-final-project-a-web-server.html)
